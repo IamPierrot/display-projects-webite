@@ -12,20 +12,7 @@ export const UtilityBar = memo(() => {
         {/* <div className="flex h-[4.5rem] w-full items-center justify-center border-b border-gray-200 p-2">
           <img src="/logo.jpg" className="absolute rounded-3xl" alt="Avatar" />
         </div> */}
-        <button
-          onClick={() => {
-            setToggleBar(!toggleBar);
-          }}
-          className={`absolute -right-5 top-1/2 h-11 w-11 ${
-            toggleBar ? "translate-x-0" : "translate-x-3"
-          } -translate-y-[55%] rounded-full bg-slate-600 transition-transform duration-300`}
-        >
-          <i
-            className={`fa fa-chevron-right ${
-              toggleBar ? "rotate-180" : "rotate-0"
-            } items-center text-center text-xl font-bold text-slate-50 transition-all duration-300 ease-linear`}
-          ></i>
-        </button>
+Q
         <nav className="flex max-h-full flex-col gap-y-4 pt-4">
           <button className="group relative rounded-xl p-2 text-cyan-600 hover:bg-slate-600">
             <svg
