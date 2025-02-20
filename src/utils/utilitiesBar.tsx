@@ -1,12 +1,16 @@
 import { memo, useState } from "react";
+import { getTheme } from "../Theme";
 
 export const UtilityBar = memo(() => {
   const [toggleBar, setToggleBar] = useState(false);
+  const [theme, setTheme] = useState(false);
+  const defaultTheme = getTheme(theme ? "Light" : "Dark");
+
   return (
     <aside
       className={`fixed top-1/2 flex h-1/2 w-fit transform ${
-        toggleBar ? "translate-x-0" : "-translate-x-[80%]"
-      }  items-center justify-center rounded-e-full p-0 align-middle text-slate-50 transition-transform duration-300 ease-in-out`}
+        toggleBar ? "translate-x-0" : "-translate-x-[87%]"
+      }  items-center justify-center rounded-e-full p-0 align-middle transition-transform duration-300 ease-in-out`}
     >
       <div className="flex w-14 flex-col items-center rounded-e-xl border-r border-slate-600 bg-slate-700">
         {/* <div className="flex h-[4.5rem] w-full items-center justify-center border-b border-gray-200 p-2">
@@ -45,8 +49,8 @@ Q
               </div>
             </div>
           </button>
-          <a
-            href="#"
+          <button
+            onClick={() => setTheme(!theme)}
             className="text-gary-400 group relative rounded-xl p-2 hover:bg-slate-600"
           >
             <svg
@@ -94,7 +98,7 @@ Q
                 Change Color Theme <span className="text-gray-400">(Y)</span>
               </div>
             </div>
-          </a>
+          </button>
         </nav>
 
         <div className="flex flex-col items-center gap-y-4 pb-4 pt-12">

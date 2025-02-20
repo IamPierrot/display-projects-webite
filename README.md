@@ -1,4 +1,4 @@
-# A new Project of Fish and Pierrot
+# A new Project of Fish, Pierrot and KitoMC
 
 <!-- This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

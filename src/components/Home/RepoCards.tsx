@@ -3,7 +3,7 @@ import getAllRespo from "../../utils/getOurRepositories";
 import { ModalCard } from "../../utils/ModalCard";
 import { RepoCardsProp } from "../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCodeFork, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faCodeFork, faL, faStar } from "@fortawesome/free-solid-svg-icons";
 
 type Author = keyof { IamPierrot: Response[]; CaSapChim: Response[]; KitoMCVN: Response[]; }
 
@@ -13,27 +13,27 @@ export const RepoCards = () => {
   const [selectedRepo, setSelectedRepo] = useState<RepoCardsProp | null>();
   const [selectedAuthor, setSelectedAuthor] = useState<Author>("IamPierrot");
   const [toLoadMore, setToLoadMore] = useState<number>(3);
+  const [displayBtn, setDisplayBtn] = useState<boolean>(true);
 
   useEffect(() => {
-    const repositories: RepoCardsProp[] = [];
     getAllRespo().then((rs) => {
-      rs[selectedAuthor][0].map((i) => {
-        if (!i.fork && !i.private) {
-          repositories.push({
-            id: i.id,
-            author: selectedAuthor,
-            avatarUrl: i.owner.avatar_url,
-            repoTitle: i.name,
-            desc: i.description,
-            star: i.stargazers_count,
-            fork: i.forks_count,
-            repoUrl: i.html_url,
-            language: i.language,
-            create_at: i.created_at,
-          });
-        }
-      });
+      const repositories = rs[selectedAuthor][0]
+        .filter((i) => !i.fork && !i.private)
+        .map((i) => ({
+          id: i.id,
+          author: selectedAuthor,
+          avatarUrl: i.owner.avatar_url,
+          repoTitle: i.name,
+          desc: i.description,
+          star: i.stargazers_count,
+          fork: i.forks_count,
+          repoUrl: i.html_url,
+          language: i.language,
+          create_at: i.created_at,
+        }));
       setRepos(repositories);
+    }).catch((error) => {
+      console.error("Error fetching repositories:", error);
     });
   }, [selectedAuthor]);
 
@@ -50,10 +50,16 @@ export const RepoCards = () => {
   const handleAuthorChange = (author: Author) => {
     setSelectedAuthor(author);
     setToLoadMore(3);
+    setDisplayBtn(true);
   }
 
-  const handleLoadMore = (num: number) => {
-    setToLoadMore(toLoadMore + num);
+  const handleLoadMore = async () => {
+    const remainingReposToLoad = repos.length - toLoadMore - 3;
+
+    if (remainingReposToLoad <= 0) {
+      setDisplayBtn(false);
+    }
+    setToLoadMore(prev => prev + 3);
   }
 
   const title: string = "Details of this repository";
@@ -126,14 +132,17 @@ export const RepoCards = () => {
           language={selectedRepo?.language}
         />
       </div>
+      {
+        displayBtn &&
         <div className="flex w-full justify-center mt-4">
-          <button
-          className="bg-cyan-600 px-4 py-2 rounded-lg hover:opacity-80 duration-300"
-            onClick={() => handleLoadMore(3)}
-          >
-            Load More
-          </button>
+            <button
+            className="bg-cyan-600 px-4 py-2 rounded-lg hover:opacity-80 duration-300"
+              onClick={handleLoadMore}
+            >
+              Load More
+            </button>
         </div>
+      }
     </div>
   );
 };
